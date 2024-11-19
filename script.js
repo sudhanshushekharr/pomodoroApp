@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const newTask = {
             id: Date.now(),
             text: taskText,
-            completed: false
+            completed: false,
+            inProgress: false
         };
         tasks.push(newTask);
         saveTasks();
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         li.innerHTML = `
             <span>${task.text}</span>
             <div>
-                <button class="start-pomodoro-btn">Start Pomodoro</button>
+                <button class="start-pomodoro-btn">${task.inProgress ? 'In Progress' : 'Start Pomodoro'}</button>
                 <button class="delete-btn">Delete</button>
             </div>`;
 
@@ -47,8 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
             saveTasks();
         });
 
-        li.querySelector('.start-pomodoro-btn').addEventListener('click', () => {
-            startPomodoro(task.text);
+        const pomodoroBtn = li.querySelector('.start-pomodoro-btn');
+        pomodoroBtn.addEventListener('click', () => {
+            if (!task.inProgress) {
+                startPomodoro(task.text);
+                task.inProgress = true;
+                pomodoroBtn.textContent = 'In Progress';
+                pomodoroBtn.style.backgroundColor = '#FFA500'; // Orange color for "In Progress"
+                saveTasks();
+            }
         });
 
         todoList.appendChild(li);
@@ -60,13 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Pomodoro Timer Variables
     let timer;
-    let timerDuration = 25 * 60; // 25 minutes
+    let timerDuration = 25 * 60; // Default: 25 minutes
     let timeLeft = timerDuration;
+    let currentMode = 'work';
 
     const timerDisplay = document.getElementById("timer-display");
+    const currentModeDisplay = document.getElementById("current-mode");
     const startTimerBtn = document.getElementById("start-timer-btn");
     const pauseTimerBtn = document.getElementById("pause-timer-btn");
     const resetTimerBtn = document.getElementById("reset-timer-btn");
+    const work25Btn = document.getElementById("work-25");
+    const work50Btn = document.getElementById("work-50");
+    const break5Btn = document.getElementById("break-5");
 
     function updateTimerDisplay() {
         const minutes = Math.floor(timeLeft / 60);
@@ -83,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     clearInterval(timer);
                     timer = null;
-                    alert("Time's up! Take a break or start a new session.");
+                    alert(`${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)} session completed!`);
                 }
             }, 1000);
         }
@@ -101,15 +114,37 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTimerDisplay();
     }
 
+    function setTimerDuration(duration, mode) {
+        timerDuration = duration * 60;
+        timeLeft = timerDuration;
+        currentMode = mode;
+        currentModeDisplay.textContent = `${mode.charAt(0).toUpperCase() + mode.slice(1)} Session`;
+        resetTimer();
+    }
+
     function startPomodoro(taskName) {
         alert(`Starting Pomodoro for task: ${taskName}`);
-        resetTimer();
+        // Reset all tasks' inProgress status
+        tasks.forEach(task => {
+            task.inProgress = false;
+        });
+        // Update all task buttons
+        document.querySelectorAll('.start-pomodoro-btn').forEach(btn => {
+            btn.textContent = 'Start Pomodoro';
+            btn.style.backgroundColor = '#4caf50'; // Reset to original color
+        });
+        setTimerDuration(25, 'work');
         startTimer();
+        saveTasks();
     }
 
     startTimerBtn.addEventListener('click', startTimer);
     pauseTimerBtn.addEventListener('click', pauseTimer);
     resetTimerBtn.addEventListener('click', resetTimer);
+
+    work25Btn.addEventListener('click', () => setTimerDuration(25, 'work'));
+    work50Btn.addEventListener('click', () => setTimerDuration(50, 'work'));
+    break5Btn.addEventListener('click', () => setTimerDuration(5, 'break'));
 
     updateTimerDisplay();
 });

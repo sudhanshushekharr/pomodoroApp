@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dark Mode To-Do List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1, h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            background-color: #333333;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            outline: none;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #6200ea;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #333333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        li button {
+            background-color: #d32f2f;
+            padding: 5px 10px;
+            margin-left: 5px;
+        }
+
+        li button:hover {
+            background-color: #b71c1c;
+        }
+
+        #pomodoro-timer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #timer-display {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        #timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .start-pomodoro-btn {
+            background-color: #4caf50;
+        }
+
+        .start-pomodoro-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+   
+  </head>
+  <body>
+    <div class="container">
+        <div id="pomodoro-timer">
+            <h3>Pomodoro Timer</h3>
+            <div id="timer-display">25:00</div>
+            <div id="timer-controls">
+                <button id="start-timer-btn">Start</button>
+                <button id="pause-timer-btn">Pause</button>
+                <button id="reset-timer-btn">Reset</button>
+            </div>
+        </div>
+        <h1>To-Do List</h1>
+        <div class="input-container">
+            <input type="text" id="todo-input" placeholder="Add a new task..." />
+            <button id="add-task-btn">Add Task</button>
+        </div>
+        <ul id="todo-list"></ul>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
